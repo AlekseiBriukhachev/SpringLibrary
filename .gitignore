@@ -1,2 +1,7 @@
 # Project exclude paths
-/SpringLibrary/target/
+.idea/
+*.iml
+*.iws
+
+log/
+target/
