@@ -1,6 +1,5 @@
 package com.aleksei.springcourse.springlibraryboot.controllers;
 
-
 import com.aleksei.springcourse.springlibraryboot.models.Book;
 import com.aleksei.springcourse.springlibraryboot.models.Person;
 import com.aleksei.springcourse.springlibraryboot.services.BooksService;
@@ -12,9 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-
 @Controller
-@RequestMapping("/book")
+@RequestMapping("/books")
 public class BookController {
 
     private final BooksService booksService;
@@ -30,11 +28,12 @@ public class BookController {
     public String index(Model model, @RequestParam(value = "page", required = false) Integer page,
                         @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
                         @RequestParam(value = "sort_by_year", required = false) boolean sortByYear) {
-        if (page == null || booksPerPage ==null) {
-            model.addAttribute("books", booksService.findAll(sortByYear));
-        } else {
+
+        if (page == null || booksPerPage == null)
+            model.addAttribute("books", booksService.findAll(sortByYear)); // выдача всех книг
+        else
             model.addAttribute("books", booksService.findWithPagination(page, booksPerPage, sortByYear));
-        }
+
         return "books/index";
     }
 
@@ -43,6 +42,7 @@ public class BookController {
         model.addAttribute("book", booksService.findOne(id));
 
         Person bookOwner = booksService.getBookOwner(id);
+
         if (bookOwner != null)
             model.addAttribute("owner", bookOwner);
         else
@@ -96,13 +96,16 @@ public class BookController {
 
     @PatchMapping("/{id}/assign")
     public String assign(@PathVariable("id") int id, @ModelAttribute("person") Person selectedPerson) {
+        // У selectedPerson назначено только поле id, остальные поля - null
         booksService.assign(id, selectedPerson);
         return "redirect:/books/" + id;
     }
+
     @GetMapping("/search")
-    public String searchPage(){
+    public String searchPage() {
         return "books/search";
     }
+
     @PostMapping("/search")
     public String makeSearch(Model model, @RequestParam("query") String query) {
         model.addAttribute("books", booksService.searchByTitle(query));

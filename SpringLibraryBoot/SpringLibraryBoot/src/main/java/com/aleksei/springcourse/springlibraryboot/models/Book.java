@@ -16,27 +16,35 @@ public class Book {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotEmpty(message = "Name of book should be not empty")
-    @Size(min = 2, max = 100, message = "Name should be between 2 and 100 characters")
+
+    @NotEmpty(message = "Название книги не должно быть пустым")
+    @Size(min = 2, max = 100, message = "Название книги должно быть от 2 до 100 символов длиной")
     @Column(name = "title")
     private String title;
-    @NotEmpty(message = "Author name not should be empty")
-    @Size(min = 2, max = 30, message = "Author name should be beetwen 2 and 30 characters")
-    @Pattern(regexp = "[A-Z]\\w+ [A-Z]\\w+}", message = "Author should be in this format: First name Last Name")
+
+    @NotEmpty(message = "Автор не должен быть пустым")
+    @Size(min = 2, max = 100, message = "Имя автора должно быть от 2 до 100 символов длиной")
     @Column(name = "author")
     private String author;
-    @Min(value = 1000, message = "Year should be not less than 900")
+
+    @Min(value = 1500, message = "Год должен быть больше, чем 1500")
     @Column(name = "year")
     private int year;
-    @Column(name = "taken_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date takenAt;
+
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person owner;
+
+    @Column(name = "taken_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date takenAt;
+
     @Transient
-    private boolean expired;
-    public Book(){}
+    private boolean expired; // Hibernate не будет замечать этого поля, что нам и нужно. По-умолчанию false.
+
+    public Book() {
+
+    }
 
     public Book(String title, String author, int year) {
         this.title = title;
@@ -98,15 +106,5 @@ public class Book {
 
     public void setExpired(boolean expired) {
         this.expired = expired;
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", year=" + year +
-                '}';
     }
 }

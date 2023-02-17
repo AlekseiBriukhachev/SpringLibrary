@@ -12,16 +12,20 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
+/**
+ * @author Neil Alishev
+ */
 @Controller
 @RequestMapping("/people")
 public class PeopleController {
-    private final PersonValidator personValidator;
+
     private final PeopleService peopleService;
+    private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PersonValidator personValidator, PeopleService peopleService) {
-        this.personValidator = personValidator;
+    public PeopleController(PeopleService peopleService, PersonValidator personValidator) {
         this.peopleService = peopleService;
+        this.personValidator = personValidator;
     }
 
     @GetMapping()
@@ -34,6 +38,7 @@ public class PeopleController {
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("person", peopleService.findOne(id));
         model.addAttribute("books", peopleService.getBooksByPersonId(id));
+
         return "people/show";
     }
 
@@ -43,7 +48,8 @@ public class PeopleController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
+    public String create(@ModelAttribute("person") @Valid Person person,
+                         BindingResult bindingResult) {
         personValidator.validate(person, bindingResult);
 
         if (bindingResult.hasErrors())
@@ -60,10 +66,8 @@ public class PeopleController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("person") @Valid Person person,
-                         BindingResult bindingResult, @PathVariable("id") int id) {
-        personValidator.validate(person, bindingResult);
-
+    public String update(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult,
+                         @PathVariable("id") int id) {
         if (bindingResult.hasErrors())
             return "people/edit";
 
