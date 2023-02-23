@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="SpringLibrary:war exploded">
-    <output-path>$PROJECT_DIR$/SpringLibrary/target/spring-book-library</output-path>
+    <output-path>$PROJECT_DIR$/target/spring-book-library</output-path>
     <properties id="maven-jee-properties">
       <options>
         <exploded>true</exploded>
@@ -38,7 +38,7 @@
         </element>
       </element>
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/SpringLibrary/target/spring-book-library/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/target/spring-book-library/META-INF/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="SpringLibrary/web/Web" />
     </root>
